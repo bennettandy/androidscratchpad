@@ -1,5 +1,6 @@
 package uk.co.avsoftware.fragvm.ui.main
 
+import android.content.Intent
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
@@ -8,14 +9,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import uk.co.avsoftware.fragvm.R
+import uk.co.avsoftware.fragvm.ui.login.LoginActivity
 
 class MainFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = MainFragment()
-
-        const val TAG = "MainFragment"
-    }
 
     private lateinit var viewModel: MainViewModel
 
@@ -26,12 +22,23 @@ class MainFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        // TODO: Use the ViewModel
 
+        // ViewModel, obtain or create new from factory
+        viewModel = ViewModelProvider(this, MainViewModelFactory()).get(MainViewModel::class.java)
+
+        // TODO: Use the ViewModel
         Log.i(TAG, "OnActivityCreated()")
+
+        if (!viewModel.isLoggedIn()) {
+            Log.i(TAG, "Not Logged In")
+            startActivity(Intent(context, LoginActivity::class.java))
+        }
     }
 
 
+    companion object {
+        fun newInstance() = MainFragment()
 
+        const val TAG = "MainFragment"
+    }
 }
