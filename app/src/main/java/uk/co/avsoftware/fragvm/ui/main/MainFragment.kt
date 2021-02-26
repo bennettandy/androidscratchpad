@@ -37,7 +37,7 @@ class MainFragment : Fragment() {
 
         // inflate view via DataBindings
         binding = DataBindingUtil.inflate(inflater, R.layout.main_fragment, container, false)
-
+        binding.lifecycleOwner = this
         return binding.root
     }
 
@@ -50,28 +50,31 @@ class MainFragment : Fragment() {
 
         binding.viewmodel = viewModel
 
-        when (!viewModel.isLoggedIn()) {
+        when (viewModel.isLoggedIn()) {
 
-            //true -> Toast.makeText(context, "XXX Logged In", Toast.LENGTH_LONG).show()
+            true -> Toast.makeText(context, "XXX Logged In", Toast.LENGTH_LONG).show()
 
             false -> Intent(context, LoginActivity::class.java).also {
-                startActivity(it)
+                startActivityForResult(it, REQUEST_CODE)
             }
-
         }
-
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
-        ObjectAnimator.ofFloat(binding.boxer, "translationX", -1000f).apply {
-            duration = 2000
+        when (requestCode) {
+            REQUEST_CODE -> animate()
+        }
+    }
+
+    private fun animate() {
+        ObjectAnimator.ofFloat(binding.boxer, "translationX", 1000f).apply {
+            duration = 1000
             startDelay = 1000
-            interpolator = AnticipateInterpolator()
+            interpolator = AnticipateInterpolator(4.0f)
             start()
         }
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -84,5 +87,6 @@ class MainFragment : Fragment() {
     companion object {
         fun newInstance() = MainFragment()
         const val TAG = "MainFragment"
+        const val REQUEST_CODE = 100
     }
 }
