@@ -1,5 +1,6 @@
 package uk.co.avsoftware.fragvm.ui.login
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import uk.co.avsoftware.fragvm.data.LoginDataSource
@@ -13,6 +14,9 @@ class LoginViewModelFactory : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
+
+        Log.i(TAG, "CREATE LoginViewModel")
+
         if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
             return LoginViewModel(
                 loginRepository = LoginRepository(
@@ -21,5 +25,9 @@ class LoginViewModelFactory : ViewModelProvider.Factory {
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
+    }
+
+    companion object {
+        const val TAG = "LoginViewModelFactory"
     }
 }

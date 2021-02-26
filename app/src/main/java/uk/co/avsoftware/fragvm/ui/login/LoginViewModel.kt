@@ -11,7 +11,9 @@ import uk.co.avsoftware.fragvm.R
 
 class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
 
-    private val _loginForm = MutableLiveData<LoginFormState>()
+    // example lazy initialiser
+    private val _loginForm: MutableLiveData<LoginFormState> by lazy { MutableLiveData<LoginFormState>() }
+
     val loginFormState: LiveData<LoginFormState> = _loginForm
 
     private val _loginResult = MutableLiveData<LoginResult>()

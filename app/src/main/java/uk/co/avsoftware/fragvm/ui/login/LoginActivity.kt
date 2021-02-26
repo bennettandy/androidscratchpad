@@ -4,10 +4,12 @@ import android.app.Activity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.os.PersistableBundle
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
@@ -21,20 +23,42 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var loginViewModel: LoginViewModel
 
+    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
+        super.onSaveInstanceState(outState, outPersistentState)
+        // persist instance state if not using view model
+        outPersistentState.putBoolean("persisted", true)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // some lifecycle tracing debug
+        Log.i(
+            TAG,
+            "Persisted state: " + (savedInstanceState?.getBoolean("persisted", false)
+                ?: "no bundle")
+        )
+
         setContentView(R.layout.activity_login)
 
+        // components
         val username = findViewById<EditText>(R.id.username)
         val password = findViewById<EditText>(R.id.password)
         val login = findViewById<Button>(R.id.login)
         val loading = findViewById<ProgressBar>(R.id.loading)
 
+
+        val appNameString: String = getString(R.string.app_name)
+        Log.i(TAG, "App Name: $appNameString")
+
+        // ViewModel, obtain or create new from factory
         loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
             .get(LoginViewModel::class.java)
 
         loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
+
+            Log.i("LoginFormObserver", "Observing login state $it")
+
             val loginState = it ?: return@Observer
 
             // disable login button unless both username / password is valid
@@ -49,6 +73,9 @@ class LoginActivity : AppCompatActivity() {
         })
 
         loginViewModel.loginResult.observe(this@LoginActivity, Observer {
+
+            Log.i("LoginResultObserver", "Observing login result state $it")
+
             val loginResult = it ?: return@Observer
 
             loading.visibility = View.GONE
@@ -110,6 +137,10 @@ class LoginActivity : AppCompatActivity() {
 
     private fun showLoginFailed(@StringRes errorString: Int) {
         Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
+    }
+
+    companion object {
+        const val TAG = "LoginActivity"
     }
 }
 
