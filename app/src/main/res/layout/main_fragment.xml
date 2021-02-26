@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="52dp"
             android:layout_marginEnd="140dp"
-            android:text="@string/main_main_label"
+            android:text="@{viewmodel.title}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

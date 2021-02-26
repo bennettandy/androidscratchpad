@@ -1,19 +1,27 @@
 package uk.co.avsoftware.fragvm.ui.main
 
+import android.animation.Animator
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.content.Intent
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.view.animation.AnticipateInterpolator
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import uk.co.avsoftware.fragvm.R
 import uk.co.avsoftware.fragvm.databinding.MainFragmentBinding
 import uk.co.avsoftware.fragvm.ui.login.LoginActivity
+
 
 @AndroidEntryPoint
 class MainFragment : Fragment() {
@@ -42,15 +50,28 @@ class MainFragment : Fragment() {
 
         binding.viewmodel = viewModel
 
-        when (viewModel.isLoggedIn()) {
+        when (!viewModel.isLoggedIn()) {
 
-            true -> Toast.makeText(context, "XXX Logged In", Toast.LENGTH_LONG).show()
+            //true -> Toast.makeText(context, "XXX Logged In", Toast.LENGTH_LONG).show()
 
             false -> Intent(context, LoginActivity::class.java).also {
                 startActivity(it)
             }
 
         }
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        ObjectAnimator.ofFloat(binding.boxer, "translationX", -1000f).apply {
+            duration = 2000
+            startDelay = 1000
+            interpolator = AnticipateInterpolator()
+            start()
+        }
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
