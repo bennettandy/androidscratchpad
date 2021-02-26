@@ -3,11 +3,12 @@ package uk.co.avsoftware.fragvm.data
 import android.util.Log
 import uk.co.avsoftware.fragvm.data.model.LoggedInUser
 import java.io.IOException
+import javax.inject.Inject
 
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.
  */
-class LoginDataSource {
+class LoginDataSource @Inject constructor() {
 
     fun login(username: String, password: String): Result<LoggedInUser> {
 

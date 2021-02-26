@@ -16,28 +16,17 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
+import dagger.hilt.android.AndroidEntryPoint
 
 import uk.co.avsoftware.fragvm.R
 
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var loginViewModel: LoginViewModel
 
-    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
-        super.onSaveInstanceState(outState, outPersistentState)
-        // persist instance state if not using view model
-        outPersistentState.putBoolean("persisted", true)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // some lifecycle tracing debug
-        Log.i(
-            TAG,
-            "Persisted state: " + (savedInstanceState?.getBoolean("persisted", false)
-                ?: "no bundle")
-        )
 
         setContentView(R.layout.activity_login)
 
@@ -52,8 +41,11 @@ class LoginActivity : AppCompatActivity() {
         Log.i(TAG, "App Name: $appNameString")
 
         // ViewModel, obtain or create new from factory
-        loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
-            .get(LoginViewModel::class.java)
+//        loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
+//            .get(LoginViewModel::class.java)
+
+        // Using HiltViewModelProvider
+        loginViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
 
         loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
 

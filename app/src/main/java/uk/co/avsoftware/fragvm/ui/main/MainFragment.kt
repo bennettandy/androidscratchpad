@@ -10,10 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import dagger.hilt.android.AndroidEntryPoint
 import uk.co.avsoftware.fragvm.R
 import uk.co.avsoftware.fragvm.databinding.MainFragmentBinding
 import uk.co.avsoftware.fragvm.ui.login.LoginActivity
 
+@AndroidEntryPoint
 class MainFragment : Fragment() {
 
     private lateinit var viewModel: MainViewModel
@@ -36,7 +38,7 @@ class MainFragment : Fragment() {
 
         Log.i(TAG, "OnActivityCreated()")
         // ViewModel, obtain or create new from factory
-        viewModel = ViewModelProvider(this, MainViewModelFactory()).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
         binding.viewmodel = viewModel
 

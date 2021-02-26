@@ -4,12 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import android.util.Patterns
+import androidx.hilt.lifecycle.ViewModelInject
 import uk.co.avsoftware.fragvm.data.LoginRepository
 import uk.co.avsoftware.fragvm.data.Result
 
 import uk.co.avsoftware.fragvm.R
 
-class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
+class LoginViewModel @ViewModelInject constructor(private val loginRepository: LoginRepository) :
+    ViewModel() {
 
     // example lazy initialiser
     private val _loginForm: MutableLiveData<LoginFormState> by lazy { MutableLiveData<LoginFormState>() }
