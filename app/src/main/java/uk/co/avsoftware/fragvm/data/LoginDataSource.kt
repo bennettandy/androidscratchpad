@@ -10,6 +10,7 @@ import javax.inject.Inject
  */
 class LoginDataSource @Inject constructor() {
 
+    // TODO: RxAble Single<LoggedInUser>
     fun login(username: String, password: String): Result<LoggedInUser> {
 
         Log.d(TAG, "Username $username -> password size $password")

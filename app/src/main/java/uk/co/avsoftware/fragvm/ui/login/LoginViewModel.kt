@@ -4,13 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import android.util.Patterns
-import androidx.hilt.lifecycle.ViewModelInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import uk.co.avsoftware.fragvm.data.LoginRepository
 import uk.co.avsoftware.fragvm.data.Result
 
 import uk.co.avsoftware.fragvm.R
+import javax.inject.Inject
 
-class LoginViewModel @ViewModelInject constructor(private val loginRepository: LoginRepository) :
+@HiltViewModel
+class LoginViewModel @Inject constructor(private val loginRepository: LoginRepository) :
     ViewModel() {
 
     // example lazy initialiser

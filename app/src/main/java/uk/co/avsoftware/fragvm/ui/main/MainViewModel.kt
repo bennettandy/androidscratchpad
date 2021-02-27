@@ -1,19 +1,22 @@
 package uk.co.avsoftware.fragvm.ui.main
 
 import android.util.Log
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.*
 import uk.co.avsoftware.fragvm.data.LoginRepository
+import javax.inject.Inject
 
-class MainViewModel @ViewModelInject constructor(private val loginRepository: LoginRepository) :
+@HiltViewModel
+class MainViewModel @Inject constructor(private val loginRepository: LoginRepository) :
     ViewModel() {
+
+    init {
+        Log.w(TAG, "Init: viewModelScope isActive: ${viewModelScope.isActive}")
+    }
 
     private val _title: MutableLiveData<String> = MutableLiveData("bound live data value 'fred'")
     val title: LiveData<String> = _title
@@ -23,17 +26,23 @@ class MainViewModel @ViewModelInject constructor(private val loginRepository: Lo
 
     fun isLoggedIn(): Boolean = loginRepository.isLoggedIn
 
+    private var job: Job? = null
+
     fun test() {
+
+        job?.cancel("cancelled", Exception("duplicate instance"))
 
         _subtext.postValue("one two three")
 
         // Launch Coroutine on IO Dispatcher viewModelScope
-        val s: Job = viewModelScope.launch(Dispatchers.IO) {
-            for (i in 1..1000) {
+        job = viewModelScope.launch(Dispatchers.IO) {
+            Log.w(TAG, "Job Started!")
+            for (i in 1..10) {
                 delay(100L)
                 _subtext.postValue("count $i")
-                Log.w("MainViewModel", "COUNT $i")
+                Log.w(TAG, "COUNT $i")
             }
+            Log.w(TAG, "Job Finished!")
         }
     }
 
@@ -42,7 +51,9 @@ class MainViewModel @ViewModelInject constructor(private val loginRepository: Lo
      */
     override fun onCleared() {
         super.onCleared()
-        Log.w(TAG, "CLEARED")
+        // check that job has been stopped by the viewModelScope clear down
+        Log.w(TAG, "CLEARED ${job?.isActive}")
+        Log.w(TAG, "viewModelScope isActive: ${viewModelScope.isActive}")
     }
 
     companion object {

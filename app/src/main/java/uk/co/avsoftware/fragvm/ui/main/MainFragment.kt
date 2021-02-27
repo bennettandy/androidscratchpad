@@ -50,6 +50,8 @@ class MainFragment : Fragment() {
 
         binding.viewmodel = viewModel
 
+
+
         when (viewModel.isLoggedIn()) {
 
             true -> Toast.makeText(context, "XXX Logged In", Toast.LENGTH_LONG).show()
@@ -63,9 +65,9 @@ class MainFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        when (requestCode) {
-            REQUEST_CODE -> animate()
-        }
+//        when (requestCode) {
+//            REQUEST_CODE -> animate()
+//        }
     }
 
     private fun animate() {
