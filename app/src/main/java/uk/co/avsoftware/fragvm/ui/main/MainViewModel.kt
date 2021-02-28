@@ -26,10 +26,12 @@ class MainViewModel @Inject constructor(private val loginRepository: LoginReposi
 
     fun isLoggedIn(): Boolean = loginRepository.isLoggedIn
 
+    // handle to possible running coroutine Job
     private var job: Job? = null
 
     fun test() {
 
+        // cancel any already running Job so we don't create more than one
         job?.cancel("cancelled", Exception("duplicate instance"))
 
         _subtext.postValue("one two three")
