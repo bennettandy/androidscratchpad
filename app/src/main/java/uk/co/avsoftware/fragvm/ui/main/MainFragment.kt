@@ -1,23 +1,18 @@
 package uk.co.avsoftware.fragvm.ui.main
 
-import android.animation.Animator
 import android.animation.ObjectAnimator
-import android.animation.ValueAnimator
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import android.view.animation.AnticipateInterpolator
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import uk.co.avsoftware.fragvm.R
 import uk.co.avsoftware.fragvm.databinding.MainFragmentBinding
 import uk.co.avsoftware.fragvm.ui.login.LoginActivity
@@ -45,7 +40,7 @@ class MainFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         Log.i(TAG, "OnActivityCreated()")
-        // ViewModel, obtain or create new from factory
+        // ViewModel, obtain from Hilt
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
         binding.viewmodel = viewModel
