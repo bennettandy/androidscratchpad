@@ -1,6 +1,6 @@
 package uk.co.avsoftware.fragvm.blockchain
 
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Single
 import retrofit2.http.GET
 import retrofit2.http.Path
 import uk.co.avsoftware.fragvm.blockchain.model.Transaction
