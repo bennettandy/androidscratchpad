@@ -13,6 +13,7 @@ interface BlockchainRepository {
 
 class BlockchainRepositoryImpl constructor(private val api: BlockchainDataAPI) :
     BlockchainRepository {
+
     override fun getTransactionForHash(hash: String) = api.getTransactionByHash(hash)
 
     override fun getLatestBlock() = api.getLatestBlock()

@@ -8,7 +8,7 @@ import uk.co.avsoftware.fragvm.exp.SimpleLifecycleObserver
 
 @Module
 @InstallIn(ActivityComponent::class)
-class SimpleModule {
+object SimpleModule {
 
     @Provides
     fun providesSimpleLifecycleObserver(): SimpleLifecycleObserver = SimpleLifecycleObserver()

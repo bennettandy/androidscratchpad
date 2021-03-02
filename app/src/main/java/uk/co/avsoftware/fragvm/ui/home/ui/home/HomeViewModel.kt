@@ -1,18 +1,21 @@
 package uk.co.avsoftware.fragvm.ui.home.ui.home
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
+import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.disposables.CompositeDisposable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import uk.co.avsoftware.fragvm.blockchain.BlockDao
 import uk.co.avsoftware.fragvm.blockchain.BlockchainRepository
 import uk.co.avsoftware.fragvm.blockchain.model.Block
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val blockchainRepository: BlockchainRepository) :
+class HomeViewModel @Inject constructor(
+    private val blockchainRepository: BlockchainRepository,
+    private val blockDao: BlockDao
+) :
     ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
@@ -33,6 +36,14 @@ class HomeViewModel @Inject constructor(private val blockchainRepository: Blockc
 
     private val disposables = CompositeDisposable()
 
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            val blocks: List<Block> = blockDao.getAll()
+            Log.w(TAG, "Blocks: ${blocks.size}")
+            _latestBlock.apply { postValue(blocks.last()) }
+        }
+    }
+
     fun buttonClicked() {
         Log.w(TAG, "CLICKED")
 
@@ -40,8 +51,9 @@ class HomeViewModel @Inject constructor(private val blockchainRepository: Blockc
             blockchainRepository.getLatestBlock()
                 .doOnSubscribe { _progress_visibility.postValue(true) }
                 .doOnTerminate { _progress_visibility.postValue(false) }
+                .doOnSuccess { blockDao.insertAll(it) }
                 .doOnSuccess(_latestBlock::postValue)
-                .onErrorReturnItem(Block("?????", 0L, 0, 0, emptyList()))
+                .onErrorReturnItem(Block("?????", 0L, 0, 0))
                 .subscribe()
         )
 
