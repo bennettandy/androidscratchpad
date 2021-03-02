@@ -5,10 +5,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
+import dagger.hilt.android.lifecycle.HiltViewModel
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import uk.co.avsoftware.fragvm.blockchain.BlockchainRepository
 import uk.co.avsoftware.fragvm.blockchain.model.Block
-import java.util.*
+import javax.inject.Inject
 
-class HomeViewModel : ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(private val blockchainRepository: BlockchainRepository) :
+    ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
         value = "This is the home Fragment2"
@@ -21,17 +26,30 @@ class HomeViewModel : ViewModel() {
     val hash: LiveData<String> = latestBlock.map { it.hash }
     val block_index: LiveData<Int> = latestBlock.map { it.block_index }
 
+    private val _progress_visibility = MutableLiveData<Boolean>().apply {
+        value = false
+    }
+    val progress_visibility: LiveData<Boolean> = _progress_visibility
+
+    private val disposables = CompositeDisposable()
+
     fun buttonClicked() {
         Log.w(TAG, "CLICKED")
-        _latestBlock.postValue(
-            Block(
-                UUID.randomUUID().toString(),
-                45666L,
-                10,
-                30,
-                listOf(234L, 45667L)
-            )
+
+        disposables.add(
+            blockchainRepository.getLatestBlock()
+                .doOnSubscribe { _progress_visibility.postValue(true) }
+                .doOnTerminate { _progress_visibility.postValue(false) }
+                .doOnSuccess(_latestBlock::postValue)
+                .onErrorReturnItem(Block("?????", 0L, 0, 0, emptyList()))
+                .subscribe()
         )
+
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        disposables.dispose()
     }
 
     companion object {

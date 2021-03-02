@@ -8,6 +8,8 @@
             name="viewmodel"
             type="uk.co.avsoftware.fragvm.ui.home.ui.home.HomeViewModel" />
 
+        <import type="android.view.View" />
+
     </data>
 
     <LinearLayout
@@ -36,13 +38,27 @@
             android:textAlignment="center"
             android:textSize="20sp" />
 
-        <Button
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:onClick="@{() -> viewmodel.buttonClicked()}"
-            android:text="refresh" />
+            android:gravity="center"
+            android:orientation="horizontal">
 
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:onClick="@{() -> viewmodel.buttonClicked()}"
+                android:text="refresh" />
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:indeterminate="true"
+                android:visibility="@{viewmodel.progress_visibility ? View.VISIBLE : View.INVISIBLE}" />
+
+        </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
