@@ -1,6 +1,8 @@
 package uk.co.avsoftware.fragvm.di
 
 import android.content.Context
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -10,10 +12,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import uk.co.avsoftware.fragvm.R
-import uk.co.avsoftware.fragvm.blockchain.BlockDao
-import uk.co.avsoftware.fragvm.blockchain.BlockchainDataAPI
-import uk.co.avsoftware.fragvm.blockchain.BlockchainRepository
-import uk.co.avsoftware.fragvm.blockchain.BlockchainRepositoryImpl
+import uk.co.avsoftware.fragvm.blockchain.*
 import javax.inject.Named
 
 @Module
@@ -21,11 +20,14 @@ import javax.inject.Named
 class BlockchainApiModule {
 
     @Provides
+    fun provideBlockCache(dao: CacheDao, gson: Gson): BlockCache = BlockCacheImpl(dao, gson)
+
+    @Provides
     fun provideBlockchainRepository(
         blockchainDataAPI: BlockchainDataAPI,
-        blockDao: BlockDao
+        cache: BlockCache
     ): BlockchainRepository =
-        BlockchainRepositoryImpl(blockchainDataAPI, blockDao)
+        BlockchainRepositoryImpl(blockchainDataAPI, cache)
 
     @Provides
     fun provideBlockchainDataApi(retrofit: Retrofit): BlockchainDataAPI =
@@ -42,7 +44,11 @@ class BlockchainApiModule {
         .build();
 
     @Provides
-    fun provideConverterFactory() = GsonConverterFactory.create()
+    fun provideGson(): Gson = GsonBuilder().create()
+
+    @Provides
+    fun provideConverterFactory(gson: Gson) = GsonConverterFactory
+        .create(gson)
 
     @Provides
     @Named("baseUrl")

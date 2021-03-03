@@ -7,16 +7,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import uk.co.avsoftware.fragvm.blockchain.BlockchainRepository
-import uk.co.avsoftware.fragvm.blockchain.CacheDao
 import uk.co.avsoftware.fragvm.blockchain.model.Block
 import javax.inject.Inject
 
 @HiltViewModel
-
 class HomeViewModel @Inject constructor(
-    private val blockchainRepository: BlockchainRepository,
-    private val cacheDao: CacheDao
+    private val blockchainRepository: BlockchainRepository
 ) :
     ViewModel() {
 
@@ -51,11 +49,11 @@ class HomeViewModel @Inject constructor(
 
         disposables.add(
             blockchainRepository.getLatestBlock()
+                .subscribeOn(Schedulers.io())
                 .doOnSubscribe { _progress_visibility.postValue(true) }
                 .doOnTerminate { _progress_visibility.postValue(false) }
-                //.doOnSuccess { cacheDao.(it) }
-                .doOnSuccess(_latestBlock::postValue)
                 .onErrorReturnItem(Block("?????", 0L, 0, 0))
+                .doOnNext(_latestBlock::postValue)
                 .subscribe()
         )
 
