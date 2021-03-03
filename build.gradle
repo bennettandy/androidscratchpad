@@ -33,7 +33,7 @@ task clean(type: Delete) {
 ext {
     // Sdk and tools
     // Bumping minSdk to 21 to avoid adding multidex just for androidTests
-    minSdkVersion = 21
+    minSdkVersion = 24
     targetSdkVersion = 28
     compileSdkVersion = 28
 
