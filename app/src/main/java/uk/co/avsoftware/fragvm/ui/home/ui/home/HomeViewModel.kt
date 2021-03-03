@@ -1,20 +1,22 @@
 package uk.co.avsoftware.fragvm.ui.home.ui.home
 
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import uk.co.avsoftware.fragvm.blockchain.BlockDao
 import uk.co.avsoftware.fragvm.blockchain.BlockchainRepository
+import uk.co.avsoftware.fragvm.blockchain.CacheDao
 import uk.co.avsoftware.fragvm.blockchain.model.Block
 import javax.inject.Inject
 
 @HiltViewModel
+
 class HomeViewModel @Inject constructor(
     private val blockchainRepository: BlockchainRepository,
-    private val blockDao: BlockDao
+    private val cacheDao: CacheDao
 ) :
     ViewModel() {
 
@@ -37,11 +39,11 @@ class HomeViewModel @Inject constructor(
     private val disposables = CompositeDisposable()
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
-            val blocks: List<Block> = blockDao.getAll()
-            Log.w(TAG, "Blocks: ${blocks.size}")
-            _latestBlock.apply { postValue(blocks.last()) }
-        }
+//        viewModelScope.launch(Dispatchers.IO) {
+//            cacheDao.findByKey(LATEST_BLOCK_KEY).ifPresent { cache -> }
+//            Log.w(TAG, "Blocks: ${blocks.size}")
+//            _latestBlock.apply { postValue(blocks.last()) }
+//        }
     }
 
     fun buttonClicked() {
@@ -51,7 +53,7 @@ class HomeViewModel @Inject constructor(
             blockchainRepository.getLatestBlock()
                 .doOnSubscribe { _progress_visibility.postValue(true) }
                 .doOnTerminate { _progress_visibility.postValue(false) }
-                .doOnSuccess { blockDao.insertAll(it) }
+                //.doOnSuccess { cacheDao.(it) }
                 .doOnSuccess(_latestBlock::postValue)
                 .onErrorReturnItem(Block("?????", 0L, 0, 0))
                 .subscribe()
@@ -66,5 +68,6 @@ class HomeViewModel @Inject constructor(
 
     companion object {
         const val TAG = "HomeViewModel"
+        const val LATEST_BLOCK_KEY = "latest-block"
     }
 }

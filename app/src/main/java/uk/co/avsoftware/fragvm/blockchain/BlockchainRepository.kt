@@ -11,7 +11,10 @@ interface BlockchainRepository {
     fun getLatestBlock(): Single<Block>
 }
 
-class BlockchainRepositoryImpl constructor(private val api: BlockchainDataAPI) :
+class BlockchainRepositoryImpl constructor(
+    private val api: BlockchainDataAPI,
+    private val blockDao: BlockDao
+) :
     BlockchainRepository {
 
     override fun getTransactionForHash(hash: String) = api.getTransactionByHash(hash)

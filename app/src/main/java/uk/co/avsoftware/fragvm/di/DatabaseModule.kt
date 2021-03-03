@@ -9,6 +9,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import uk.co.avsoftware.fragvm.blockchain.AppDatabase
 import uk.co.avsoftware.fragvm.blockchain.BlockDao
+import uk.co.avsoftware.fragvm.blockchain.CacheDao
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -23,4 +24,7 @@ object DatabaseModule {
 
     @Provides
     fun provideBlockDao(database: AppDatabase): BlockDao = database.blockDao()
+
+    @Provides
+    fun provideCacheDao(database: AppDatabase): CacheDao = database.cacheDao()
 }
