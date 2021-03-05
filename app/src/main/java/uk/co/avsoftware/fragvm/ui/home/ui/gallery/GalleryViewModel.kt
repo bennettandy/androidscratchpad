@@ -3,12 +3,13 @@ package uk.co.avsoftware.fragvm.ui.home.ui.gallery
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
+import uk.co.avsoftware.fragvm.blockchain.BlockchainRepository
 import uk.co.avsoftware.fragvm.blockchain.model.Block
 import javax.inject.Inject
 
-@HiltViewModel
 class GalleryViewModel @Inject constructor() : ViewModel() {
+
+    lateinit var repository: BlockchainRepository
 
     private val _text = MutableLiveData<String>().apply {
         value = "This is the gallery Fragment, will hold recyclerview"

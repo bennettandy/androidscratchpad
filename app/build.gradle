@@ -118,4 +118,11 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
     // Intent Interception within Espresso
     androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoVersion"
+
+    // Fragment Scenario Testing
+    debugImplementation "androidx.fragment:fragment-testing:$fragment_version"
+    debugImplementation("androidx.fragment:fragment-ktx:$fragment_version")
+    debugImplementation("androidx.test:core:$fragment_version")
+    debugImplementation("androidx.test:rules:$fragment_version")
+    debugImplementation("androidx.test:runner:$fragment_version")
 }
