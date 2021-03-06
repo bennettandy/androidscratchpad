@@ -45,6 +45,7 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/btn_refresh"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -52,6 +53,7 @@
                 android:text="refresh" />
 
             <ProgressBar
+                android:id="@+id/progress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="50dp"
@@ -69,6 +71,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@{viewmodel.block_index.toString()}" />
+
+        <Button
+            android:id="@+id/nav_to_gallery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Navigate to gallery" />
 
     </LinearLayout>
 </layout>

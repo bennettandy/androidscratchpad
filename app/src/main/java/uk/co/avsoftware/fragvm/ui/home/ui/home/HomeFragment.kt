@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import uk.co.avsoftware.fragvm.R
 import uk.co.avsoftware.fragvm.databinding.FragmentHomeBinding
@@ -31,6 +32,10 @@ class HomeFragment : Fragment() {
 
         // set the view model onto the view binding
         binding.viewmodel = homeViewModel
+
+        binding.navToGallery.setOnClickListener {
+            it.findNavController().navigate(HomeFragmentDirections.actionNavHomeToNavGallery())
+        }
 
         return binding.root
     }
