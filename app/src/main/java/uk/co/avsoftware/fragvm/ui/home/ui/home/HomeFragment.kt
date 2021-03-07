@@ -34,7 +34,12 @@ class HomeFragment : Fragment() {
         binding.viewmodel = homeViewModel
 
         binding.navToGallery.setOnClickListener {
-            it.findNavController().navigate(HomeFragmentDirections.actionNavHomeToNavGallery())
+            it.findNavController()
+                .navigate(HomeFragmentDirections.actionNavHomeToNavGallery(homeViewModel.hash.value))
+        }
+
+        binding.navToSlideshow.setOnClickListener {
+            it.findNavController().navigate(HomeFragmentDirections.actionNavHomeToNavSlideshow())
         }
 
         return binding.root

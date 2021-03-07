@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import uk.co.avsoftware.fragvm.blockchain.model.Block
 import uk.co.avsoftware.fragvm.blockchain.model.Cache
 
-@Database(entities = arrayOf(Block::class, Cache::class), version = 3)
+@Database(entities = [Block::class, Cache::class], version = 3)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun blockDao(): BlockDao
     abstract fun cacheDao(): CacheDao

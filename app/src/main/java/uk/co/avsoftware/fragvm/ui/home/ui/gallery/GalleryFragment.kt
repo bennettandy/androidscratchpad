@@ -1,6 +1,7 @@
 package uk.co.avsoftware.fragvm.ui.home.ui.gallery
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,6 +31,14 @@ class GalleryFragment() : Fragment() {
 
         // allow overriding of view model repository for testing....?
 //        galleryViewModel.repository = blockChainRepository
+        arguments?.let {
+            val args = GalleryFragmentArgs.fromBundle(it)
+
+            val hashString = args.HashString
+
+            Log.w(TAG, "Hash String Received: $hashString")
+        }
+
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_gallery, container, false)
         binding.lifecycleOwner = this
@@ -53,5 +62,9 @@ class GalleryFragment() : Fragment() {
             adapter.blocks = it
             adapter.notifyDataSetChanged()
         })
+    }
+
+    companion object {
+        const val TAG = "GalleryFragment"
     }
 }
